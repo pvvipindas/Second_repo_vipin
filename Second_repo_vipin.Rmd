@@ -17,14 +17,80 @@ When you click the **Knit** button a document will be generated that includes bo
 
 ```{r cars}
 summary(cars)
+library(ggplot2)
+
 ```
 
 ## Including Plots
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r }
+plot <- read.table(file = 'data/data.txt', 
+                      header = TRUE, sep = "\t", 
+                      stringsAsFactors = TRUE)
+names(plot)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+heatmap <- ggplot(data = plot, mapping = aes(x = Representative_Sequence,
+                                                       y = station
+                                                       fill = Abundance)) +
+  geom_tile() +
+  xlab(label = "Sample")
+heatmap
+```
+```{r}
+mine.data <- read.table(file = "data/mine-data.txt")
+str(mine.data)
+library("tidyr")
+```
+```{r}
+mine.long <- pivot_longer(data = mine.data, 
+                          cols = -c(1:3), 
+                          names_to = "Class", 
+                          values_to = "Abundance")
+head(mine.long)
+```
+```{r}
+plot.long <- pivot_longer(data = plot,
+                          cols = -c(1),
+                       names_to = "Class", 
+                          values_to = "Abundance")
+head(plot.long)
+```
+```{r}
+plot.long <- pivot_longer(data = plot, 
+                    cols = Representative_Sequence, 
+                    names_to = "Class", 
+                    values_to = "Abundance")
+mine.heatmap <- ggplot(data = plot.long, mapping = aes(x = 1,
+                                                       y = Class,
+                                                       fill = Abundance)) +
+  geom_tile() +
+  xlab(label = "Sample")
+mine.heatmap
+```
+```{r}
+plotb <- read.table(file = 'data/data1.txt', 
+                      header = TRUE, sep = "\t", 
+                      stringsAsFactors = TRUE)
+```
+```{r}
+plotb.long <- pivot_longer(data = plotb,
+                          cols = -c(Stations),
+                       names_to = "Class", 
+                          values_to = "Abundance")
+head(plotb.long)
+```
+```{r}
+
+ vipi.heatmap <- ggplot(data = plotb.long, mapping = aes(x = Stations,
+                                                       y = Class,
+                                                       fill = Abundance)) +
+  geom_tile() +
+  xlab(label = "Sample")
+vipi.heatmap
+```
+
